@@ -20,28 +20,22 @@
 
   <!-- Las cuatro pantallas del juego. Task 2 monta portada y clase;
        examen y resultado las rellenan Tasks 3-4. -->
-  <!-- Pantalla 0: normas de la clase (petición de Marcos). Es lo primero
-       que se ve al abrir; el botón lleva a la portada del juego. -->
+  <!-- Pantalla inicial única: título + subtítulo + normas de la clase
+       (petición de Marcos: el cartel de "NORMAS DE LA CLASE" no va; el
+       botón ENTRAR AL AULA arranca la clase directamente). El fondo del
+       aula va como <img>: image-rendering pixelated es fiable así en
+       Safari (sobre background-image no siempre se aplica). -->
   <section id="pantalla-normas" class="pantalla activa pantalla-normas">
     <img class="fondo-aula-img" src="sprites/fondo-clase.jpg" alt="" aria-hidden="true">
     <div class="normas-contenido">
+      <h1 id="normas-titulo" class="portada-titulo"></h1>
+      <p id="normas-subtitulo" class="portada-subtitulo"></p>
       <div class="normas-panel">
-        <h1 id="normas-titulo" class="normas-titulo"></h1>
         <p id="normas-intro" class="normas-texto"></p>
         <ol id="normas-lista" class="normas-lista"></ol>
         <p id="normas-cierre" class="normas-texto"></p>
       </div>
       <button id="boton-entrar" class="boton-grande" type="button">ENTRAR AL AULA</button>
-    </div>
-  </section>
-
-  <section id="pantalla-portada" class="pantalla pantalla-portada">
-    <!-- Fondo del aula como <img>: image-rendering pixelated es fiable así
-         en Safari (sobre background-image no siempre se aplica). -->
-    <img class="fondo-aula-img" src="sprites/fondo-clase.jpg" alt="" aria-hidden="true">
-    <div class="portada-contenido">
-      <h1 id="portada-titulo" class="portada-titulo"></h1>
-      <button id="boton-empezar" class="boton-grande" type="button">EMPEZAR LA CLASE</button>
     </div>
   </section>
 

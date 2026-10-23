@@ -95,7 +95,7 @@ if (GAME_DATA) {
 
   // --- Normas (pantalla 0) y despedida (última escena tras el diploma) ---
   var normas = GAME_DATA.normas || {};
-  ["titulo", "intro", "cierre", "boton"].forEach(function (c) {
+  ["intro", "cierre", "boton"].forEach(function (c) {
     comprobar(esTextoValido(normas[c]), "normas." + c + " vacío o ausente");
   });
   comprobar(Array.isArray(normas.lista) && normas.lista.length > 0,

@@ -1,7 +1,7 @@
 /* =========================================================
    game.js — Motor DOM del juego.
    Tasks 2: irAPantalla, Typewriter, DialoguePlayer, el módulo
-   audio, la portada y la escena de la clase.
+   audio, la pantalla inicial (normas) y la escena de la clase.
    Task 3: examen (renderExamen, leerRespuestas, terminarExamen).
    Task 4: resultado (mostrarResultado, confeti, diploma,
    reintento), sobre las mismas piezas de Task 2:
@@ -1084,7 +1084,7 @@
     var boton = document.createElement("button");
     boton.id = "boton-despedida";
     boton.type = "button";
-    boton.className = "boton-grande"; // ≥44px (estilo compartido con portada)
+    boton.className = "boton-grande"; // ≥44px (estilo compartido con el inicio)
     boton.textContent = (window.GAME_DATA.resultados && window.GAME_DATA.resultados.botonDespedida) ||
       "UNA ÚLTIMA COSA...";
     boton.addEventListener("click", function () {
@@ -1240,8 +1240,9 @@
      ======================================================= */
 
   /**
-   * Pantalla 0: normas de la clase (texto de Marcos en data.js).
-   * El botón ENTRAR AL AULA lleva a la portada.
+   * Pantalla inicial única: título + subtítulo del juego y, en medio,
+   * las normas de la clase (texto de Marcos en data.js). El botón
+   * ENTRAR AL AULA arranca la clase directamente (ya no hay portada).
    */
   function montarNormas() {
     var seccion = document.getElementById("pantalla-normas");
@@ -1252,12 +1253,14 @@
     }
 
     var titulo = document.getElementById("normas-titulo");
+    var subtitulo = document.getElementById("normas-subtitulo");
     var intro = document.getElementById("normas-intro");
     var lista = document.getElementById("normas-lista");
     var cierre = document.getElementById("normas-cierre");
     var boton = document.getElementById("boton-entrar");
 
-    if (titulo) titulo.textContent = datos.titulo;
+    if (titulo) titulo.textContent = window.GAME_DATA.titulo;
+    if (subtitulo) subtitulo.textContent = window.GAME_DATA.subtitulo;
     if (intro) intro.textContent = datos.intro;
     if (cierre) cierre.textContent = datos.cierre;
     if (boton) boton.textContent = datos.boton || "ENTRAR AL AULA";
@@ -1270,14 +1273,15 @@
     }
     if (boton) {
       boton.addEventListener("click", function () {
-        audio.preparar(); // gesto del usuario: el contexto queda listo
-        irAPantalla("pantalla-portada");
+        audio.preparar(); // primer gesto: el AudioContext nace aquí (iOS)
+        irAPantalla("pantalla-clase");
+        arrancarClase(); // el jugador pasa de leer las normas a la clase
       });
     }
   }
 
   /* =======================================================
-     Montaje de la portada y la escena de la clase
+     Montaje de la escena de la clase
      ======================================================= */
 
   var jugadorClase = null; // DialoguePlayer de la clase (se crea al EMPEZAR)
@@ -1287,26 +1291,6 @@
       var img = new Image();
       img.src = "sprites/yo/" + nombre + ".png";
     });
-  }
-
-  function montarPortada() {
-    var portada = document.getElementById("pantalla-portada");
-    if (!portada) {
-      console.warn("[portada] No existe #pantalla-portada");
-      return;
-    }
-
-    var titulo = document.getElementById("portada-titulo");
-    if (titulo) titulo.textContent = window.GAME_DATA.titulo;
-
-    var boton = document.getElementById("boton-empezar");
-    if (boton) {
-      boton.addEventListener("click", function () {
-        audio.preparar(); // primer gesto: el AudioContext nace aquí (iOS)
-        irAPantalla("pantalla-clase"); // FIX Task 3: el id real es "pantalla-clase" (Task 2 llamaba a irAPantalla("clase"), que no existe)
-        arrancarClase();
-      });
-    }
   }
 
   function arrancarClase() {
@@ -1392,8 +1376,7 @@
 
     document.title = window.GAME_DATA.titulo;
     precargarSprites();
-    montarNormas(); // pantalla 0: normas de la clase (petición de Marcos)
-    montarPortada();
+    montarNormas(); // pantalla inicial única: título + subtítulo + normas
     montarPantallaClase();
     montarPantallaResultado(); // Task 4: listener único de tap para avanzar el diálogo
     montarBotonSonido();

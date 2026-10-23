@@ -9,10 +9,10 @@ window.GAME_DATA = {
   titulo: "EL EXCELENTÍSIMO DON MARCOS",
   subtitulo: "Primera Clase — Examen Sorpresa",
 
-  /* Pantalla inicial (antes de la portada): normas de la clase.
-     Texto de Marcos, con las tildes arregladas. */
+  /* Pantalla inicial única: el título y el subtítulo del juego encima,
+     las normas de la clase en medio (texto de Marcos, tildes arregladas)
+     y el botón ENTRAR AL AULA que arranca la clase directamente. */
   normas: {
-    titulo: "NORMAS DE LA CLASE",
     intro: "¿Estáis preparados para asistir a la clase del ilustre profesor Marcos? Vuestras únicas normas serán:",
     lista: [
       "Prestarás atención en clase.",

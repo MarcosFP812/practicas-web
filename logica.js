@@ -104,12 +104,12 @@
     if (!esTextoValido(data.titulo)) problemas.push("titulo: vacío o ausente");
     if (!esTextoValido(data.subtitulo)) problemas.push("subtitulo: vacío o ausente");
 
-    // Normas (pantalla inicial, antes de la portada)
+    // Normas (pantalla inicial; el título y subtítulo son los del juego)
     if (!data.normas || typeof data.normas !== "object") {
       problemas.push("normas: falta el bloque normas");
     } else {
       var n = data.normas;
-      ["titulo", "intro", "cierre", "boton"].forEach(function (campo) {
+      ["intro", "cierre", "boton"].forEach(function (campo) {
         if (!esTextoValido(n[campo])) {
           problemas.push("normas." + campo + ": vacío o ausente");
         }
