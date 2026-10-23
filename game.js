@@ -46,27 +46,31 @@
     overlay.classList.add("encendida"); // tapa el corte entre pantallas
     if (transicionTimer) clearTimeout(transicionTimer);
 
+    // PRIMERO se localiza el destino (sin tocar nada). Solo si existe se
+    // intercambian las clases: así un id erróneo nunca deja el juego sin
+    // ninguna pantalla visible (pantalla en negro) — se mantiene la actual.
     var destino = null;
     var pantallas = document.querySelectorAll(".pantalla");
     Array.prototype.forEach.call(pantallas, function (p) {
-      if (p.id === id) {
-        destino = p;
-        p.classList.add("activa");
-      } else {
-        p.classList.remove("activa");
-      }
+      if (p.id === id) destino = p;
     });
     if (!destino) {
       // Alias corto de defensa (Task 3): si el id exacto no existe se
       // prueba con el prefijo "pantalla-" ("examen" → "pantalla-examen").
       var porPrefijo = document.getElementById("pantalla-" + id);
-      if (porPrefijo) {
-        destino = porPrefijo;
-        porPrefijo.classList.add("activa");
-      }
+      if (porPrefijo) destino = porPrefijo;
     }
+
     if (!destino) {
-      console.warn("[irAPantalla] No existe ninguna pantalla con id \"" + id + "\"");
+      console.warn("[irAPantalla] No existe ninguna pantalla con id \"" + id + "\": se mantiene la actual.");
+    } else {
+      Array.prototype.forEach.call(pantallas, function (p) {
+        if (p === destino) {
+          p.classList.add("activa");
+        } else {
+          p.classList.remove("activa");
+        }
+      });
     }
 
     transicionTimer = setTimeout(function () {
