@@ -104,6 +104,27 @@
     if (!esTextoValido(data.titulo)) problemas.push("titulo: vacío o ausente");
     if (!esTextoValido(data.subtitulo)) problemas.push("subtitulo: vacío o ausente");
 
+    // Normas (pantalla inicial, antes de la portada)
+    if (!data.normas || typeof data.normas !== "object") {
+      problemas.push("normas: falta el bloque normas");
+    } else {
+      var n = data.normas;
+      ["titulo", "intro", "cierre", "boton"].forEach(function (campo) {
+        if (!esTextoValido(n[campo])) {
+          problemas.push("normas." + campo + ": vacío o ausente");
+        }
+      });
+      if (!Array.isArray(n.lista) || n.lista.length === 0) {
+        problemas.push("normas.lista: debe ser una lista con al menos una norma");
+      } else {
+        n.lista.forEach(function (regla, i) {
+          if (!esTextoValido(regla)) {
+            problemas.push("normas.lista[" + i + "]: vacía o ausente");
+          }
+        });
+      }
+    }
+
     // Diálogos de la clase
     if (!Array.isArray(data.dialogos) || data.dialogos.length === 0) {
       problemas.push("dialogos: debe ser una lista con al menos una línea");
@@ -146,6 +167,10 @@
           }
         });
       }
+      validarLineasResultado(r.despedida, "despedida", problemas);
+      if (!esTextoValido(r.botonDespedida)) problemas.push("resultados.botonDespedida: vacío o ausente");
+      if (!esTextoValido(r.textoFin)) problemas.push("resultados.textoFin: vacío o ausente");
+      if (!esTextoValido(r.botonFin)) problemas.push("resultados.botonFin: vacío o ausente");
     }
 
     return problemas;

@@ -9,6 +9,20 @@ window.GAME_DATA = {
   titulo: "EL EXCELENTÍSIMO DON MARCOS",
   subtitulo: "Primera Clase — Examen Sorpresa",
 
+  /* Pantalla inicial (antes de la portada): normas de la clase.
+     Texto de Marcos, con las tildes arregladas. */
+  normas: {
+    titulo: "NORMAS DE LA CLASE",
+    intro: "¿Estáis preparados para asistir a la clase del ilustre profesor Marcos? Vuestras únicas normas serán:",
+    lista: [
+      "Prestarás atención en clase.",
+      "Nunca insultarás al profesor ni te reirás de su alopecia.",
+      "Llevaréis el mismo ritmo todos vosotros: ninguno se puede adelantar al resto."
+    ],
+    cierre: "Espero que disfrutéis de la clase magistral.",
+    boton: "ENTRAR AL AULA"
+  },
+
   /* Escena de la clase: saludo → peluquín → anuncio del examen sorpresa.
      Cada línea: { sprite, texto, efecto? } con efecto "zoom"|"shake".
      Sprites válidos: normal, feliz, triste, enfadado, soprendido, asustado. */
@@ -169,6 +183,22 @@ window.GAME_DATA = {
       titulo: "DIPLOMA DE DONMARCOLOGÍA",
       cuerpo: "Por sus grandes méritos soportando al niño pedorro durante todos estos 4 años de carrera. Ha sido un verdadero honor compartir tantas experiencias juntos: el señor Don Marcos se siente extremadamente orgulloso de haberlos vivido junto a vosotros. Este título acredita que eres una persona maravillosa y concede la posibilidad de continuar en la vida del ilustre profesor hasta un periodo de: TODA LA VIDA.",
       firma: "Atte.: Don Marcos — Os quiero infinito."
-    }
+    },
+
+    /* Última escena, tras el diploma: despedida de Marcos fuera de
+       personaje. Texto de Marcos ("dale un poquito de gracia, sin fabada").
+       Mismo formato que los diálogos: { sprite, texto, efecto? } */
+    despedida: [
+      { sprite: "normal", texto: "Bueno... ahora sí: me dejo de tonterías y ya os dejo en paz." },
+      { sprite: "feliz", texto: "Solo espero que disfrutéis el día y la graduación tanto como lo voy a disfrutar yo." },
+      { sprite: "feliz", texto: "Y sobre todo: ¡aprovechad muchísimo la comida! Que para eso hemos venido, ¿no?" },
+      { sprite: "normal", texto: "Es un honor teneros aquí hoy, y estoy deseando compartir cada minuto con vosotros." },
+      { sprite: "feliz", texto: "Os quiero mucho." },
+      { sprite: "soprendido", texto: "Ah, y por cierto... creo que SE ME HA PERDIDO algo por vuestra casa. A la vuelta... miradlo, jeje.", efecto: "shake" },
+      { sprite: "feliz", texto: "¡ADIOOOOS!", efecto: "zoom" }
+    ],
+    botonDespedida: "UNA ÚLTIMA COSA...",
+    textoFin: "FIN",
+    botonFin: "VOLVER AL INICIO"
   }
 };

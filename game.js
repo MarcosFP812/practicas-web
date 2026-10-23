@@ -1079,16 +1079,104 @@
 
     seccion.appendChild(papel);
 
-    // VOLVER AL INICIO: location.reload() — la forma más fiable de
-    // restaurar TODO el estado inicial (portada activa, examen limpio,
-    // sin confeti/timers/listeners vivos). Recargar la página no deja
-    // nada por limpiar a mano. Documentado en task-4-report.md.
+    // Botón UNA ÚLTIMA COSA... → la escena de despedida (petición de
+    // Marcos: tras el diploma viene una última escena antes del FIN).
     var boton = document.createElement("button");
-    boton.id = "boton-volver-inicio";
+    boton.id = "boton-despedida";
     boton.type = "button";
     boton.className = "boton-grande"; // ≥44px (estilo compartido con portada)
-    boton.textContent = "VOLVER AL INICIO";
+    boton.textContent = (window.GAME_DATA.resultados && window.GAME_DATA.resultados.botonDespedida) ||
+      "UNA ÚLTIMA COSA...";
     boton.addEventListener("click", function () {
+      audio.preparar(); // gesto del usuario
+      renderDespedida();
+      irAPantalla("pantalla-resultado"); // la sección es la misma: repone el velo de corte
+    });
+    seccion.appendChild(boton);
+  }
+
+  /**
+   * Última escena (tras el diploma): despedida de Marcos fuera de
+   * personaje. Reutiliza la estructura de la escena de resultado
+   * (escenario + caja de diálogo sobre el aula) y el listener de tap
+   * de la sección: los toques avanzan el diálogo. Al terminar → FIN.
+   */
+  function renderDespedida() {
+    limpiarPantallaResultado();
+    var seccion = document.getElementById("pantalla-resultado");
+    var lineas = window.GAME_DATA && window.GAME_DATA.resultados &&
+      window.GAME_DATA.resultados.despedida;
+    if (!seccion || !Array.isArray(lineas) || lineas.length === 0) {
+      console.warn("[despedida] Faltan #pantalla-resultado o resultados.despedida");
+      renderFin(); // sin despedida definida, al cartel de FIN directamente
+      return;
+    }
+
+    ponerFondoResultado(seccion); // el aula también en la despedida
+
+    var escenario = document.createElement("div");
+    escenario.className = "resultado-escenario";
+    var spriteEl = document.createElement("img");
+    spriteEl.className = "resultado-sprite";
+    spriteEl.src = "sprites/yo/" + (lineas[0].sprite || "normal") + ".png";
+    spriteEl.alt = ALT_PERSONAJE;
+    escenario.appendChild(spriteEl);
+    seccion.appendChild(escenario);
+
+    var caja = document.createElement("div");
+    caja.className = "resultado-dialogo";
+    var parrafo = document.createElement("p");
+    parrafo.className = "clase-parrafo"; // mismo estilo de texto que la clase
+    var textoEl = document.createElement("span");
+    var caretEl = document.createElement("span");
+    caretEl.className = "clase-caret"; // mismo caret ▼ que la escena de clase
+    caretEl.setAttribute("aria-hidden", "true");
+    caretEl.textContent = "▼";
+    parrafo.appendChild(textoEl);
+    parrafo.appendChild(caretEl);
+    caja.appendChild(parrafo);
+    seccion.appendChild(caja);
+
+    var jugador = new DialoguePlayer(spriteEl, textoEl, lineas, {
+      caretEl: caretEl,
+      onFin: function () {
+        if (jugadorResultado !== jugador) return; // quedó obsoleto
+        renderFin();
+      }
+    });
+    jugadorResultado = jugador; // el tap de la sección avanza este diálogo
+    jugador.avanzar(); // primera línea ya en marcha
+  }
+
+  /**
+   * Cartel de FIN tras la despedida: texto grande y botón VOLVER AL
+   * INICIO (location.reload(), la forma más fiable de restaurar TODO
+   * el estado inicial sin dejar timers/listeners vivos).
+   */
+  function renderFin() {
+    jugadorResultado = null; // el tap de la sección deja de hacer nada
+    limpiarPantallaResultado();
+    var seccion = document.getElementById("pantalla-resultado");
+    var resultados = window.GAME_DATA && window.GAME_DATA.resultados;
+    if (!seccion || !resultados) {
+      console.warn("[fin] Faltan #pantalla-resultado o GAME_DATA.resultados");
+      return;
+    }
+
+    ponerFondoResultado(seccion);
+
+    var fin = document.createElement("div");
+    fin.className = "fin-titulo";
+    fin.textContent = resultados.textoFin || "FIN";
+    seccion.appendChild(fin);
+
+    var boton = document.createElement("button");
+    boton.id = "boton-fin";
+    boton.type = "button";
+    boton.className = "boton-grande";
+    boton.textContent = resultados.botonFin || "VOLVER AL INICIO";
+    boton.addEventListener("click", function () {
+      audio.preparar(); // gesto del usuario
       location.reload();
     });
     seccion.appendChild(boton);
@@ -1145,6 +1233,47 @@
     seccion.addEventListener("click", function () {
       if (jugadorResultado) jugadorResultado.avanzar();
     });
+  }
+
+  /* =======================================================
+     Montaje de la pantalla de normas (lo primero que se ve)
+     ======================================================= */
+
+  /**
+   * Pantalla 0: normas de la clase (texto de Marcos en data.js).
+   * El botón ENTRAR AL AULA lleva a la portada.
+   */
+  function montarNormas() {
+    var seccion = document.getElementById("pantalla-normas");
+    var datos = window.GAME_DATA && window.GAME_DATA.normas;
+    if (!seccion || !datos) {
+      console.warn("[normas] Faltan #pantalla-normas o GAME_DATA.normas");
+      return;
+    }
+
+    var titulo = document.getElementById("normas-titulo");
+    var intro = document.getElementById("normas-intro");
+    var lista = document.getElementById("normas-lista");
+    var cierre = document.getElementById("normas-cierre");
+    var boton = document.getElementById("boton-entrar");
+
+    if (titulo) titulo.textContent = datos.titulo;
+    if (intro) intro.textContent = datos.intro;
+    if (cierre) cierre.textContent = datos.cierre;
+    if (boton) boton.textContent = datos.boton || "ENTRAR AL AULA";
+    if (lista) {
+      (Array.isArray(datos.lista) ? datos.lista : []).forEach(function (regla) {
+        var li = document.createElement("li");
+        li.textContent = regla;
+        lista.appendChild(li);
+      });
+    }
+    if (boton) {
+      boton.addEventListener("click", function () {
+        audio.preparar(); // gesto del usuario: el contexto queda listo
+        irAPantalla("pantalla-portada");
+      });
+    }
   }
 
   /* =======================================================
@@ -1263,11 +1392,12 @@
 
     document.title = window.GAME_DATA.titulo;
     precargarSprites();
+    montarNormas(); // pantalla 0: normas de la clase (petición de Marcos)
     montarPortada();
     montarPantallaClase();
     montarPantallaResultado(); // Task 4: listener único de tap para avanzar el diálogo
     montarBotonSonido();
-    // La portada ya está visible en el HTML (class="pantalla activa").
+    // La pantalla de normas ya está visible en el HTML (class="pantalla activa").
   }
 
   window.iniciarJuego = iniciarJuego;

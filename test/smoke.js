@@ -93,6 +93,33 @@ if (GAME_DATA) {
     comprobar(esTextoValido(dip[c]), "resultados.diploma." + c + " vacío o ausente");
   });
 
+  // --- Normas (pantalla 0) y despedida (última escena tras el diploma) ---
+  var normas = GAME_DATA.normas || {};
+  ["titulo", "intro", "cierre", "boton"].forEach(function (c) {
+    comprobar(esTextoValido(normas[c]), "normas." + c + " vacío o ausente");
+  });
+  comprobar(Array.isArray(normas.lista) && normas.lista.length > 0,
+    "normas.lista debe ser una lista con al menos una norma");
+  (normas.lista || []).forEach(function (regla, i) {
+    comprobar(esTextoValido(regla), "normas.lista[" + i + "]: vacía o ausente");
+  });
+
+  var despedida = res.despedida || [];
+  comprobar(Array.isArray(res.despedida) && despedida.length > 0,
+    "resultados.despedida debe ser una lista con al menos una línea");
+  despedida.forEach(function (l, i) {
+    comprobar(!!l && typeof l.sprite === "string" && SPRITES_VALIDOS.indexOf(l.sprite) !== -1,
+      "resultados.despedida[" + i + "]: sprite inválido (" + JSON.stringify(l && l.sprite) + ")");
+    comprobar(!!l && esTextoValido(l.texto), "resultados.despedida[" + i + "]: texto vacío o ausente");
+    if (l && l.efecto !== undefined) {
+      comprobar(l.efecto === "zoom" || l.efecto === "shake",
+        "resultados.despedida[" + i + "]: efecto inválido (" + JSON.stringify(l.efecto) + ")");
+    }
+  });
+  ["botonDespedida", "textoFin", "botonFin"].forEach(function (c) {
+    comprobar(esTextoValido(res[c]), "resultados." + c + " vacío o ausente");
+  });
+
   // --- validarDatos NO debe dar problemas con los datos reales ---
   var problemasReales = Logica.validarDatos(GAME_DATA);
   comprobar(Array.isArray(problemasReales) && problemasReales.length === 0,
