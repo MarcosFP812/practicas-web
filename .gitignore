@@ -1,0 +1,13 @@
+.superpowers/
+.opencode/
+
+# Apuntes personales del contenido (de Marcos): nunca se rastrea ni se publica.
+preguntas.txt
+
+# Notas personales de Marcos (no publicar). Patrón con comodín para que
+# la "ó" con cualquier codificación no rompa la regla.
+preguntas.txt
+conversac*.txt
+
+# QR local para compartir el enlace (no forma parte del juego)
+qr-*.png

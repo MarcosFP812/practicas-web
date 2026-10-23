@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>EL EXCELENTÍSIMO DON MARCOS</title>
+
+  <!-- Icono de la pestaña: birrete 🎓 en una línea, sin fichero extra
+       (así el navegador tampoco pide favicon.ico y no hay 404). -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'%3E%3Ctext%20y='13'%20font-size='13'%3E%F0%9F%8E%93%3C/text%3E%3C/svg%3E">
+
+  <!-- Fuente pixel (Press Start 2P) con fallback monospace definido en style.css -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Las cuatro pantallas del juego. Task 2 monta portada y clase;
+       examen y resultado las rellenan Tasks 3-4. -->
+  <section id="pantalla-portada" class="pantalla activa pantalla-portada">
+    <!-- Fondo del aula como <img>: image-rendering pixelated es fiable así
+         en Safari (sobre background-image no siempre se aplica). -->
+    <img class="fondo-aula-img" src="sprites/fondo-clase.jpg" alt="" aria-hidden="true">
+    <div class="portada-contenido">
+      <h1 id="portada-titulo" class="portada-titulo"></h1>
+      <button id="boton-empezar" class="boton-grande" type="button">EMPEZAR LA CLASE</button>
+    </div>
+  </section>
+
+  <section id="pantalla-clase" class="pantalla pantalla-clase">
+    <img class="fondo-aula-img" src="sprites/fondo-clase.jpg" alt="" aria-hidden="true">
+    <button id="boton-saltar" class="boton-saltar" type="button">SALTAR ⏩</button>
+    <div class="clase-escenario">
+      <img id="clase-sprite" class="clase-sprite" src="sprites/yo/normal.png" alt="Don Marcos">
+    </div>
+    <div class="clase-dialogo">
+      <p class="clase-parrafo"><span id="clase-texto"></span><span id="clase-caret" class="clase-caret" aria-hidden="true">▼</span></p>
+    </div>
+  </section>
+
+  <section id="pantalla-examen" class="pantalla">
+    <!-- Task 3: examen sorpresa -->
+  </section>
+
+  <section id="pantalla-resultado" class="pantalla">
+    <!-- Task 4: resultado y diploma -->
+  </section>
+
+  <!-- Botón de sonido fijo (el comportamiento lo conectan Tasks 2-4) -->
+  <button id="boton-sonido" type="button" aria-label="Silenciar o activar sonido">🔊</button>
+
+  <!-- Orden obligatorio: lógica pura ANTES de los datos y del juego -->
+  <script src="logica.js"></script>
+  <script src="data.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
